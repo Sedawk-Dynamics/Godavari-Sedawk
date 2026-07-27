@@ -88,7 +88,7 @@ export default function Hero() {
   }
 
   return (
-    <div ref={heroRef} className="relative w-full min-h-screen overflow-hidden flex items-center bg-[#082F49]">
+    <div id="home" ref={heroRef} className="relative w-full min-h-screen overflow-hidden flex items-center bg-[#082F49]">
 
       {/* ── Slide images ── */}
       <AnimatePresence initial={false} custom={direction}>

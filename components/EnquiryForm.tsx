@@ -21,12 +21,22 @@ const initialForm: FormState = {
   message: '',
 }
 
+const WEB3FORMS_ACCESS_KEY = '7138f857-2064-4438-87c4-bc8645869a98'
+
+const plotSizeLabels: Record<string, string> = {
+  '250': '250 Sq Yards — ₹16.66 Lakhs',
+  '500': '500 Sq Yards — ₹33.33 Lakhs',
+  '1000': '1000 Sq Yards — ₹66.66 Lakhs',
+  custom: 'Custom / Multiple Plots',
+}
+
 export default function EnquiryForm() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const [form, setForm] = useState<FormState>(initialForm)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [errors, setErrors] = useState<Partial<FormState>>({})
 
   const validate = () => {
@@ -43,11 +53,39 @@ export default function EnquiryForm() {
     const errs = validate()
     if (Object.keys(errs).length > 0) { setErrors(errs); return }
     setErrors({})
+    setSubmitError('')
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1500))
-    setLoading(false)
-    setSubmitted(true)
-    setForm(initialForm)
+
+    const plotSize = plotSizeLabels[form.plotSize] ?? form.plotSize
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `New Site Visit Enquiry — ${form.name}`,
+          from_name: 'GGDPL Website Enquiry',
+          name: form.name,
+          phone: form.phone,
+          // Web3Forms uses `email` as reply-to and validates it; only send when given
+          ...(form.email.trim() ? { email: form.email.trim() } : {}),
+          plot_size: plotSize,
+          message: form.message || 'No additional message',
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSubmitted(true)
+        setForm(initialForm)
+      } else {
+        setSubmitError(data.message || 'Something went wrong. Please try again or call us directly.')
+      }
+    } catch {
+      setSubmitError('Network error. Please check your connection and try again, or call us directly.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -277,6 +315,12 @@ export default function EnquiryForm() {
                         className={`${inputCls('message')} resize-none`}
                       />
                     </div>
+
+                    {submitError && (
+                      <p className="text-sm text-[#DF2638] font-sans bg-[#FDECEE] border border-[#F5C2C7] rounded-xl px-4 py-3">
+                        {submitError}
+                      </p>
+                    )}
 
                     <button
                       type="submit"
