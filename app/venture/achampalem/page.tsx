@@ -190,6 +190,14 @@ export default function AchampalemPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
+            <Image
+              src="/the-ozes.jpeg"
+              alt="The Ozes logo — Premium Farm Plots & Weekend Homes"
+              width={1536}
+              height={1024}
+              className="h-28 md:h-36 w-auto rounded-2xl shadow-xl mb-6"
+              priority
+            />
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#69AE38]/90 text-white text-xs font-bold rounded-full mb-4 tracking-wider uppercase">
               <Home size={12} />
               Premium Farm Plots &amp; Weekend Homes

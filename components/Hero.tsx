@@ -30,6 +30,7 @@ const slides = [
   {
     id: 'achampalem',
     bg: '/images/ozes-banner.png',
+    logo: '/the-ozes.jpeg',
     alt: 'The Ozes Premium Farm Plots & Weekend Homes Venture, Achampalem',
     badge: 'Premium Farm Plots & Weekend Homes',
     badgeColor: '#A5D6A7',
@@ -127,6 +128,17 @@ export default function Hero() {
             transition={{ duration: 0.7, ease: 'easeInOut' }}
             className="max-w-3xl"
           >
+            {/* Venture logo */}
+            {'logo' in slide && slide.logo && (
+              <Image
+                src={slide.logo}
+                alt={`${slide.titleLine1} logo`}
+                width={1536}
+                height={1024}
+                className="h-28 md:h-36 w-auto rounded-2xl shadow-xl mb-5"
+              />
+            )}
+
             {/* Location badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-5">
               <MapPin size={13} style={{ color: slide.badgeColor }} />
