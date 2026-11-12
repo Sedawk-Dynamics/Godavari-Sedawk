@@ -10,10 +10,10 @@ import { useSectionNav } from '@/lib/useSectionNav'
 
 const ventures = [
   {
-    href: '/venture',
-    name: 'Sreevari Nagar',
-    sub: 'Sagguru, Krishna District',
-    tag: 'APCRDA Approved',
+    href: '/venture/achampalem',
+    name: 'The Ozes',
+    sub: 'Achampalem, Narasaraopet',
+    tag: 'Farm Plots',
     icon: MapPin,
     color: '#0865A5',
   },
